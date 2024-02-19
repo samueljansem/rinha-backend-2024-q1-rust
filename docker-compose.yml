@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  api01: &api
+    build: .
+    hostname: api01
+    ports:
+      - '3001:3000'
+
+  api02:
+    <<: *api
+    hostname: api02
+    ports:
+      - '3002:3000'
+
+  nginx:
+    image: nginx
+    ports:
+      - '9999:9999'
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api01
+      - api02
+
+networks:
+  default:
+    driver: bridge
+    name: rinha-backend-2024-q1-rust
